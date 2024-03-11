@@ -2,7 +2,6 @@ import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { post } from '@/utils/request'
 import { useAuthStore, useSettingStore } from '@/store'
 
-
 export function fetchChatAPI<T = any>(
   prompt: string,
   options?: { conversationId?: string; parentMessageId?: string },
@@ -66,12 +65,11 @@ export function fetchVerify<T>(token: string) {
   })
 }
 
-export * from "./mjapi"
-export * from "./mjsave"
-export * from "./openapi"
-export * from "./units"
-export * from "./mic"
-export * from "./chat"
-export * from "./sse/fetchsse"
-export * from "./Recognition"
-
+export * from './mjapi'
+export * from './mjsave'
+export * from './openapi'
+export * from './units'
+export * from './mic'
+export * from './chat'
+export * from './sse/fetchsse'
+export * from './Recognition'

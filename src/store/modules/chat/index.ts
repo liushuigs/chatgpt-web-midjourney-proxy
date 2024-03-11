@@ -182,13 +182,13 @@ export const useChatStore = defineStore('chat-store', {
         this.recordState()
       }
 
-      //清空标题
-      const i2= this.history.findIndex( v=>v.uuid===uuid )
+      // 清空标题
+      const i2 = this.history.findIndex(v => v.uuid === uuid)
       if (i2 !== -1) {
-        this.history[i2].title= "New Chat"
-         this.recordState()
+        this.history[i2].title = 'New Chat'
+        this.recordState()
       }
-      //end 清空标题
+      // end 清空标题
     },
 
     clearHistory() {
@@ -197,9 +197,9 @@ export const useChatStore = defineStore('chat-store', {
     },
 
     async reloadRoute(uuid?: number) {
-      this.recordState();
+      this.recordState()
 
-      await router.push({ name: homeStore.myData.local=='draw'?'draw': 'Chat', params: { uuid } })
+      await router.push({ name: homeStore.myData.local == 'draw' ? 'draw' : 'Chat', params: { uuid } })
     },
 
     recordState() {

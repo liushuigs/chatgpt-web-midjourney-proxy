@@ -120,7 +120,8 @@ function clearData(): void {
 
 function handleImportButtonClick(): void {
   const fileInput = document.getElementById('fileInput2') as HTMLElement
-  if (fileInput)   fileInput.click()
+  if (fileInput)
+    fileInput.click()
 }
 </script>
 
