@@ -41,20 +41,20 @@ router.get('/admin/user/list', async (req, res) => {
 
 router.post('/admin/user/update', async (req, res, next) => {
   try {
-    const data = await updateUser(req.body)
-    res.send(data)
+    await updateUser(req.body)
+    res.send({ status: 'Success', data: null })
   }
   catch (e) {
     res.status(400).json({ error: e })
   }
 })
 
-router.get('/admin/user/delete', async (req, res, next) => {
-  if (!req.query.id)
+router.post('/admin/user/delete', async (req, res) => {
+  if (!req.body.id)
     throw new Error('params error')
 
   try {
-    await deleteUser(parseInt(req.query.id as string, 10))
+    await deleteUser(parseInt(req.body.id as string, 10))
     res.send({ status: 'Success' })
   }
   catch (e) {

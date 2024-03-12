@@ -36,7 +36,7 @@ interface UserParams {
 export async function updateUser(params: UserParams) {
   const dataSource = await getInstance()
   let data
-  if (params.id) {
+  if (params.id > 0) {
     data = await dataSource
       .createQueryBuilder()
       .update(User)
@@ -50,7 +50,7 @@ export async function updateUser(params: UserParams) {
       .insert()
       .into(User)
       .values([
-        params,
+        { ...params, id: null },
       ])
       .execute()
   }

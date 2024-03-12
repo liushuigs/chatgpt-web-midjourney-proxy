@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from 'naive-ui'
-import { NButton, NCard, NForm, NFormItem, NInput, NInputGroup, NInputNumber, NModal, NSpace, NTable, useMessage } from 'naive-ui'
+import {
+  NButton, NCard, NForm, NFormItem, NInput, NInputGroup,
+  NInputNumber, NModal, NPopconfirm, NSpace, NTable,
+  useMessage,
+} from 'naive-ui'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { getUserList } from '@/api'
+import { v4 as uuidv4 } from 'uuid'
+import { deleteUser, getUserList, updateUser } from '@/api'
 
 interface UserType {
   id: number
@@ -71,7 +76,12 @@ const onEdit = (item: UserType) => {
 }
 const onAdd = () => {
   showModal.value = true
-  formValue.value.user = { id: 0, name: '', token: '', imageLimit: 0 }
+  formValue.value.user = {
+    id: 0,
+    name: '',
+    token: uuidv4().split('-').slice(2).join('-'),
+    imageLimit: 100,
+  }
 }
 const getData = (page: number) => {
   getUserList(page).then((res) => {
@@ -83,10 +93,14 @@ const getData = (page: number) => {
 const onSave = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate((errors) => {
-    if (!errors)
-      message.success('Valid')
-    else
-      message.error('Invalid')
+    if (!errors) {
+      updateUser(formValue.value.user).then(() => {
+        data.refresh += 1
+        showModal.value = false
+        message.success('操作成功')
+      })
+    }
+    else { message.error('Invalid') }
   })
 }
 const onSearch = () => {
@@ -96,6 +110,12 @@ const onReset = () => {
   data.page = 1
   data.refresh += 1
   data.keyword = ''
+}
+const confirmDelete = (item: UserType) => {
+  deleteUser(item.id).then(() => {
+    data.refresh += 1
+    message.success('删除成功')
+  })
 }
 
 watch(() => data.refresh, (refresh) => {
@@ -148,9 +168,14 @@ onMounted(() => {
               <NButton type="primary" size="tiny" @click="onEdit(item)">
                 修改
               </NButton>
-              <NButton size="tiny">
-                删除
-              </NButton>
+              <NPopconfirm @positive-click="confirmDelete(item)">
+                <template #trigger>
+                  <NButton size="tiny">
+                    删除
+                  </NButton>
+                </template>
+                <span>确认删除？</span>
+              </NPopconfirm>
             </NSpace>
           </td>
         </tr>
