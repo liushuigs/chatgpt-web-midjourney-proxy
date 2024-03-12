@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import path from 'path'
 import fs from 'fs'
 import multer from 'multer'
@@ -16,6 +17,7 @@ import { auth, authV2, verify } from './middleware/auth'
 import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
 import type { ChatMessage } from './chatgpt'
 import type { RequestProps } from './types'
+import { deleteUser, getList, updateUser } from './datasource/user'
 
 const app = express()
 const router = express.Router()
@@ -29,6 +31,35 @@ app.all('*', (_, res, next) => {
   res.header('Access-Control-Allow-Headers', 'authorization, Content-Type')
   res.header('Access-Control-Allow-Methods', '*')
   next()
+})
+
+router.get('/admin/user/list', async (req, res) => {
+  const page = parseInt(req.query.page as string, 10) || 1
+  const { rows, total } = await getList({ page, pageSize: 10 })
+  res.send({ rows, total })
+})
+
+router.post('/admin/user/update', async (req, res, next) => {
+  try {
+    const data = await updateUser(req.body)
+    res.send(data)
+  }
+  catch (e) {
+    res.status(400).json({ error: e })
+  }
+})
+
+router.get('/admin/user/delete', async (req, res, next) => {
+  if (!req.query.id)
+    throw new Error('params error')
+
+  try {
+    await deleteUser(parseInt(req.query.id as string, 10))
+    res.send({ status: 'Success' })
+  }
+  catch (e) {
+    res.status(400).json({ error: e })
+  }
 })
 
 router.post('/chat-process', authV2, async (req, res) => { // [authV2, limiter]
