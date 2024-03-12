@@ -36,7 +36,7 @@ app.all('*', (_, res, next) => {
 router.get('/admin/user/list', async (req, res) => {
   const page = parseInt(req.query.page as string, 10) || 1
   const { rows, total } = await getList({ page, pageSize: 10 })
-  res.send({ rows, total })
+  res.send({ status: 'Success', data: { rows, total } })
 })
 
 router.post('/admin/user/update', async (req, res, next) => {
