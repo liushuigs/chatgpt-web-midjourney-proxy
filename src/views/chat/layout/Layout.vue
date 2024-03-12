@@ -12,6 +12,13 @@ import { t } from '@/locales'
 import { openaiSetting } from '@/api'
 import { isObject } from '@/utils/is'
 
+interface Props {
+  sidebar: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  sidebar: true,
+})
+
 const router = useRouter()
 const appStore = useAppStore()
 const chatStore = useChatStore()
@@ -35,9 +42,11 @@ else if (rt.name == 'Model') {
   gptConfigStore.setMyData({ model })
   ms.success(t('mj.modleSuccess'))
 }
+if (rt.name === 'Chat') {
+  router.replace({ name: 'Chat', params: { uuid: chatStore.active } })
+  homeStore.setMyData({ local: 'Chat' })
+}
 
-router.replace({ name: 'Chat', params: { uuid: chatStore.active } })
-homeStore.setMyData({ local: 'Chat' })
 const { isMobile } = useBasicLayout()
 
 const collapsed = computed(() => appStore.siderCollapsed)
@@ -67,7 +76,7 @@ const getContainerClass = computed(() => {
     <div class="h-full overflow-hidden" :class="getMobileClass">
       <NLayout class="z-40 transition" :class="getContainerClass" has-sider>
         <aiSider v-if="!isMobile" />
-        <Sider />
+        <Sider v-if="props.sidebar" />
         <NLayoutContent class="h-full">
           <RouterView v-slot="{ Component, route }">
             <component :is="Component" :key="route.fullPath" />

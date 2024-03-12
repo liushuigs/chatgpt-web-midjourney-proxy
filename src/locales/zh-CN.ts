@@ -375,4 +375,8 @@ export default {
     },
   },
 
+  user: {
+    user: '用户',
+  },
+
 }

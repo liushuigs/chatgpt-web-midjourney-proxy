@@ -367,5 +367,7 @@ export default {
       landscape: 'Landscape (3:2)',
     },
   },
-
+  user: {
+    user: 'User',
+  },
 }

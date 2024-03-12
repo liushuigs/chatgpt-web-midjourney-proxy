@@ -71,6 +71,20 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/user',
+    name: 'RootUser',
+    component: ChatLayout,
+    props: { sidebar: false },
+    redirect: '/user/index',
+    children: [
+      {
+        path: '/user/index',
+        name: 'user',
+        component: () => import('@/views/user/index.vue'),
+      },
+    ],
+  },
 
   // 调试
   // {
