@@ -66,3 +66,13 @@ export async function deleteUser(id: number) {
     .where('id = :id', { id })
     .execute()
 }
+
+export async function updateImageLimit(id: number, imageLimit: number) {
+  const dataSource = await getInstance()
+  await dataSource
+    .createQueryBuilder()
+    .update(User)
+    .set({ imageLimit })
+    .where('id = :id', { id })
+    .execute()
+}

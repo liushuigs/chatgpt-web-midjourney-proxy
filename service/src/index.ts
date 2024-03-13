@@ -18,6 +18,7 @@ import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
 import type { ChatMessage } from './chatgpt'
 import type { RequestProps } from './types'
 import { deleteUser, getList, updateUser } from './datasource/user'
+import { userResDecoratorForImage } from './utils/proxy'
 
 const app = express()
 const router = express.Router()
@@ -166,6 +167,7 @@ app.use('/mjapi', authV2, proxy(process.env.MJ_SERVER ? process.env.MJ_SERVER : 
     proxyReqOpts.headers['Mj-Version'] = pkg.version
     return proxyReqOpts
   },
+  userResDecorator: userResDecoratorForImage,
   // limit: '10mb'
 
 }))
@@ -344,6 +346,7 @@ app.use('/openapi', authV2, proxy(API_BASE_URL, {
     proxyReqOpts.headers['Mj-Version'] = pkg.version
     return proxyReqOpts
   },
+  userResDecorator: userResDecoratorForImage,
   // limit: '10mb'
 }))
 

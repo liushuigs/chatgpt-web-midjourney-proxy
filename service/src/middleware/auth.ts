@@ -9,13 +9,14 @@ const ipErrorCount = {}
 const bannedIPs = {}
 
 async function validateToken(token: string) {
-  const data = { role: 'user', imageLimit: 0, name: '' }
+  const data = { role: 'user', imageLimit: 0, name: '', id: 0 }
   let authed = false
 
   if (process.env.AUTH_SECRET_KEY === token) {
     data.role = 'admin'
     data.name = 'admin'
     data.imageLimit = 100
+    data.id = 0
     authed = true
   }
   else {
@@ -24,6 +25,7 @@ async function validateToken(token: string) {
       data.role = 'user'
       data.imageLimit = user.imageLimit
       data.name = user.name
+      data.id = user.id
       authed = true
     }
   }
