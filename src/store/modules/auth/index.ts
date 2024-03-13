@@ -8,6 +8,7 @@ const appStore = useAppStore()
 interface SessionResponse {
   theme?: string
   auth: boolean
+  authed: boolean
   model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
   user?: User.UserType | null
 }

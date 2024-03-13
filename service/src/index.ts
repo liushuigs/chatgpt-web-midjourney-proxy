@@ -139,7 +139,7 @@ router.post('/session', authOnly, async (req, res) => {
       cmodels,
       isUploadR2,
       gptUrl,
-      authed: res.authed,
+      authed: !!res.authed,
       user: res.user,
     }
     res.send({ status: 'Success', message: '', data })
