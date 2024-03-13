@@ -3,7 +3,7 @@ import { User } from './entity/User'
 
 const AppDataSource = new DataSource({
   type: 'sqlite',
-  database: 'sqlite.sql',
+  database: './data/sqlite.db',
   synchronize: true,
   logging: false,
   entities: [User],
