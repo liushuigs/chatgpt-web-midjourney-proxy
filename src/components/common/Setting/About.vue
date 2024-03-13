@@ -81,12 +81,12 @@ const isShow = computed(() => {
 <template>
   <NSpin :show="loading">
     <div class="p-4 space-y-4">
-      <h2 class="text-xl font-bold">
+      <h2 class="text-xl font-bold hidden">
         Version - {{ pkg.version }}
         <a v-if=" isShow " class="text-red-500" href="https://github.com/Dooy/chatgpt-web-midjourney-proxy" target="_blank"> ({{ $t('mj.findVersion') }} {{ st.lastVersion }})</a>
         <a v-else-if="st.lastVersion" class="text-gray-500" href="https://github.com/Dooy/chatgpt-web-midjourney-proxy" target="_blank"> ({{ $t('mj.yesLastVersion') }})</a>
       </h2>
-      <div class="p-2 space-y-2 rounded-md bg-neutral-100 dark:bg-neutral-700">
+      <div class="p-2 space-y-2 rounded-md bg-neutral-100 dark:bg-neutral-700 hidden">
         <p v-html="$t('mj.infoStar')" />
       </div>
       <p>{{ $t("setting.api") }}：{{ config?.apiModel ?? '-' }}</p>

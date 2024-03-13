@@ -50,7 +50,7 @@ export async function updateUser(params: UserParams) {
       .insert()
       .into(User)
       .values([
-        { ...params, id: null },
+        { ...params, id: null, imageUsed: 0 },
       ])
       .execute()
   }
@@ -67,12 +67,12 @@ export async function deleteUser(id: number) {
     .execute()
 }
 
-export async function updateImageLimit(id: number, imageLimit: number) {
+export async function updateImageLimit(id: number, imageLimit: number, imageUsed: number) {
   const dataSource = await getInstance()
   await dataSource
     .createQueryBuilder()
     .update(User)
-    .set({ imageLimit })
+    .set({ imageLimit, imageUsed })
     .where('id = :id', { id })
     .execute()
 }

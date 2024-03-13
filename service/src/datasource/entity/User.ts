@@ -13,4 +13,7 @@ export class User {
 
   @Column('integer', { default: 0, unsigned: true })
     imageLimit: number
+
+  @Column('integer', { default: 0, unsigned: true })
+    imageUsed: number
 }

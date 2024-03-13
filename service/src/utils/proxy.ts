@@ -6,16 +6,16 @@ export async function userResDecoratorForImage(proxyRes, proxyResData, userReq, 
       && data.status === 'SUCCESS'
       && userRes.user
       && userRes.user.role === 'user') {
-    const { imageLimit, id } = userRes.user
-    await updateImageLimit(id, imageLimit > 0 ? imageLimit - 1 : 0)
+    const { imageLimit, id, imageUsed } = userRes.user
+    await updateImageLimit(id, imageLimit > 0 ? imageLimit - 1 : 0, imageUsed + 1)
   }
   else if (/openapi\/v1\/images\/generations/.test(userReq.originalUrl)
       && data.data && data.data[0] && data.data[0].url
       && userRes.user
       && userRes.user.role === 'user'
   ) {
-    const { imageLimit, id } = userRes.user
-    await updateImageLimit(id, imageLimit > 0 ? imageLimit - 1 : 0)
+    const { imageLimit, id, imageUsed } = userRes.user
+    await updateImageLimit(id, imageLimit > 0 ? imageLimit - 1 : 0, imageUsed + 1)
   }
 
   return proxyResData

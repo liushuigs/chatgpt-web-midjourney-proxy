@@ -14,6 +14,7 @@ interface UserType {
   name: string
   token: string
   imageLimit: number
+  imageUsed: number
 }
 
 interface ModalDataType {
@@ -21,6 +22,7 @@ interface ModalDataType {
   name: string | null
   token: string | null
   imageLimit: number | null
+  imageUsed: number | null
 }
 
 const data = reactive({
@@ -131,7 +133,7 @@ onMounted(() => {
 <template>
   <div class="p-5">
     <div class="pb-2 px-2 text-lg font-semibold">
-      User Management
+      用户管理
     </div>
     <div class="mb-2 flex justify-between">
       <NInputGroup>
@@ -151,10 +153,11 @@ onMounted(() => {
       <thead>
         <tr>
           <th>ID</th>
-          <th>Name</th>
-          <th>Token</th>
-          <th>Image Limit</th>
-          <th>Actions</th>
+          <th>姓名</th>
+          <th>登录密钥</th>
+          <th>剩余图片数</th>
+          <th>已用图片数</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
@@ -163,6 +166,7 @@ onMounted(() => {
           <td>{{ item.name }}</td>
           <td>{{ item.token }}</td>
           <td>{{ item.imageLimit }}</td>
+          <td>{{ item.imageUsed }}</td>
           <td>
             <NSpace>
               <NButton type="primary" size="tiny" @click="onEdit(item)">
@@ -198,14 +202,14 @@ onMounted(() => {
           :rules="rules"
           size="small"
         >
-          <NFormItem label="Name" path="user.name">
+          <NFormItem label="姓名" path="user.name">
             <NInput v-model:value="formValue.user.name" placeholder="输入姓名" />
           </NFormItem>
-          <NFormItem label="Token" path="user.token">
-            <NInput v-model:value="formValue.user.token" placeholder="输入Token" />
+          <NFormItem label="登录密钥" path="user.token">
+            <NInput v-model:value="formValue.user.token" placeholder="输入登录密钥" />
           </NFormItem>
-          <NFormItem label="Image Limit" path="user.imageLimit">
-            <NInputNumber v-model:value="formValue.user.imageLimit" placeholder="Image Limit" />
+          <NFormItem label="剩余图片数" path="user.imageLimit">
+            <NInputNumber v-model:value="formValue.user.imageLimit" placeholder="" />
           </NFormItem>
         </NForm>
         <template #footer>
