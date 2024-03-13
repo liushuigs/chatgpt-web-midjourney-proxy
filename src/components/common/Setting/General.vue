@@ -3,11 +3,12 @@ import { computed, ref } from 'vue'
 import { NButton, NInput, NPopconfirm, NSelect, useMessage } from 'naive-ui'
 import type { Language, Theme } from '@/store/modules/app/helper'
 import { SvgIcon } from '@/components/common'
-import { useAppStore, useUserStore } from '@/store'
+import { homeStore, useAppStore, useUserStore } from '@/store'
 import type { UserInfo } from '@/store/modules/user/helper'
 import { getCurrentDate } from '@/utils/functions'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
+import { removeToken } from '@/store/modules/auth/helper'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -72,6 +73,11 @@ function updateUserInfo(options: Partial<UserInfo>) {
 function handleReset() {
   userStore.resetUserInfo()
   ms.success(t('common.success'))
+  window.location.reload()
+}
+
+function handleLogout() {
+  removeToken()
   window.location.reload()
 }
 
@@ -221,6 +227,9 @@ function handleImportButtonClick(): void {
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.resetUserInfo') }}</span>
         <NButton size="small" @click="handleReset">
           {{ $t('common.reset') }}
+        </NButton>
+        <NButton v-if="homeStore.myData.session.authed" size="small" @click="handleLogout">
+          {{ $t('setting.logout') }}
         </NButton>
       </div>
     </div>

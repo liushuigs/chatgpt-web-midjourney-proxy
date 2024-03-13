@@ -46,10 +46,14 @@ function http<T = any>(
   method = method || 'GET'
 
   const params = Object.assign(typeof data === 'function' ? data() : data ?? {}, {})
+  const authStore = useAuthStore()
+  const headers2 = { ...headers }
+  if (authStore.token)
+    headers2['x-ptoken'] = authStore.token
 
   return method === 'GET'
-    ? request.get(url, { params, signal, onDownloadProgress }).then(successHandler, failHandler)
-    : request.post(url, params, { headers, signal, onDownloadProgress }).then(successHandler, failHandler)
+    ? request.get(url, { params, headers: headers2, signal, onDownloadProgress }).then(successHandler, failHandler)
+    : request.post(url, params, { headers: headers2, signal, onDownloadProgress }).then(successHandler, failHandler)
 }
 
 export function get<T = any>(

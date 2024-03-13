@@ -86,7 +86,11 @@ const chatId = computed(() => chatStore.active ?? '1002')
           </NTooltip>
         </a>
 
-        <a href="#/user/index" class="router-link-active router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]" @click="homeStore.setMyData({ act: 'user' }) ">
+        <a
+          v-if="homeStore.myData.user?.role === 'admin'"
+          href="#/user/index"
+          class="router-link-active router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]" @click="homeStore.setMyData({ act: 'user' }) "
+        >
           <NTooltip placement="right" trigger="hover">
             <template #trigger>
               <div class="flex h-full justify-center items-center py-1 flex-col " :class="[goHome === 'user' ? 'active' : '']">

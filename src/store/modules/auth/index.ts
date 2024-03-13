@@ -9,17 +9,20 @@ interface SessionResponse {
   theme?: string
   auth: boolean
   model: 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI'
+  user?: User.UserType | null
 }
 
 export interface AuthState {
   token: string | undefined
   session: SessionResponse | null
+  user?: User.UserType | null
 }
 
 export const useAuthStore = defineStore('auth-store', {
   state: (): AuthState => ({
     token: getToken(),
     session: null,
+    user: null,
   }),
 
   getters: {
@@ -31,9 +34,10 @@ export const useAuthStore = defineStore('auth-store', {
   actions: {
     async getSession() {
       try {
-        const { data } = await fetchSession<SessionResponse>()
+        const { data: all } = await fetchSession<SessionResponse>()
+        const { user, ...data } = all
         this.session = { ...data }
-        homeStore.setMyData({ session: data })
+        homeStore.setMyData({ session: data, user })
         if (appStore.$state.theme == 'auto')
           appStore.setTheme(data.theme && data.theme == 'light' ? 'light' : 'dark')
 
@@ -55,6 +59,14 @@ export const useAuthStore = defineStore('auth-store', {
     removeToken() {
       this.token = undefined
       removeToken()
+    },
+
+    setUser(user: UserType) {
+      this.user = user
+    },
+
+    removeUser() {
+      this.user = null
     },
   },
 })

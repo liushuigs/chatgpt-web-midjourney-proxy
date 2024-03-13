@@ -8,13 +8,14 @@ const ipErrorCount = {}
 // 存储被禁止登录的IP地址及禁止结束时间的字典
 const bannedIPs = {}
 
-async function validateToken(token) {
+async function validateToken(token: string) {
   const data = { role: 'user', imageLimit: 0, name: '' }
   let authed = false
 
   if (process.env.AUTH_SECRET_KEY === token) {
     data.role = 'admin'
     data.name = 'admin'
+    data.imageLimit = 100
     authed = true
   }
   else {
@@ -110,6 +111,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 interface AuthParams {
   checkAdmin?: boolean
   checkImageLimit?: boolean
+  checkUser?: boolean
 }
 
 const createAuth = (params: AuthParams) => async (req: Request, res: Response, next: NextFunction) => {
@@ -119,9 +121,11 @@ const createAuth = (params: AuthParams) => async (req: Request, res: Response, n
       checkLimit(req, res)
       const token = (req.header('X-Ptoken') || '').trim()
       const { data, authed } = await validateToken(token)
+      res.authed = authed
+      res.user = data
       if (params.checkAdmin && data.role !== 'admin')
         throw new Error('Error: 无访问权限 | No access rights')
-      if (!authed)
+      if (params.checkUser && !authed)
         throw new Error('Error: 无访问权限 | No access rights')
       if (params.checkImageLimit && data.imageLimit < 1)
         throw new Error('No image quota')
@@ -140,6 +144,8 @@ const createAuth = (params: AuthParams) => async (req: Request, res: Response, n
   }
 }
 
-export const authV2 = createAuth({ checkAdmin: false, checkImageLimit: true })
+export const authV2 = createAuth({ checkAdmin: false, checkImageLimit: true, checkUser: true })
 
-export const authAdmin = createAuth({ checkAdmin: true, checkImageLimit: false })
+export const authAdmin = createAuth({ checkAdmin: true, checkImageLimit: false, checkUser: true })
+
+export const authOnly = createAuth({ checkAdmin: false, checkImageLimit: false, checkUser: false })

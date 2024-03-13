@@ -13,7 +13,7 @@ import AWS from 'aws-sdk'
 import { v4 as uuidv4 } from 'uuid'
 import pkg from '../package.json'
 import { formattedDate, isNotEmptyString } from './utils/is'
-import { auth, authV2, verify } from './middleware/auth'
+import { auth, authAdmin, authOnly, authV2, verify } from './middleware/auth'
 import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
 import type { ChatMessage } from './chatgpt'
 import type { RequestProps } from './types'
@@ -33,13 +33,13 @@ app.all('*', (_, res, next) => {
   next()
 })
 
-router.get('/admin/user/list', async (req, res) => {
+router.get('/admin/user/list', authAdmin, async (req, res) => {
   const page = parseInt(req.query.page as string, 10) || 1
   const { rows, total } = await getList({ page, pageSize: 10 })
   res.send({ status: 'Success', data: { rows, total } })
 })
 
-router.post('/admin/user/update', async (req, res, next) => {
+router.post('/admin/user/update', authAdmin, async (req, res, next) => {
   try {
     await updateUser(req.body)
     res.send({ status: 'Success', data: null })
@@ -49,7 +49,7 @@ router.post('/admin/user/update', async (req, res, next) => {
   }
 })
 
-router.post('/admin/user/delete', async (req, res) => {
+router.post('/admin/user/delete', authAdmin, async (req, res) => {
   if (!req.body.id)
     throw new Error('params error')
 
@@ -98,7 +98,7 @@ router.post('/config', auth, async (req, res) => {
   }
 })
 
-router.post('/session', async (req, res) => {
+router.post('/session', authOnly, async (req, res) => {
   try {
     const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY
     const hasAuth = isNotEmptyString(AUTH_SECRET_KEY)
@@ -138,6 +138,8 @@ router.post('/session', async (req, res) => {
       cmodels,
       isUploadR2,
       gptUrl,
+      authed: res.authed,
+      user: res.user,
     }
     res.send({ status: 'Success', message: '', data })
   }
