@@ -1,9 +1,27 @@
 # ChatGPT Web Midjourney Proxy
+
 💡**声明**
 - 此项目只发布于 GitHub，基于 MIT 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、讨论群、讨论组等行为。谨防受骗。
 - 本开源是在 [ChenZhaoYu](https://github.com/Chanzhaoyu/chatgpt-web) 基础上做二次开发 ；使用 [midjourney-proxy](https://github.com/novicezk/midjourney-proxy) 提供的midjourney api 作为后端而形成的。
 
+## 打包
 
+```bash
+sh hk
+cd /data/app/chatgpt-mj-web-user && git pull
+docker build -t ydlhero/chatui:mjuser . && docker push ydlhero/chatui:mjuser
+```
+## 部署
+```bash
+docker pull ydlhero/chatui:mjuser
+docker rm -f mjuser && docker run --name mjuser  -d -p 6077:3002 \
+-e OPENAI_API_BASE_URL=gpt-server \
+-e OPENAI_API_KEY=gpt-key \
+-e MJ_SERVER=mj-server \
+-e MJ_API_SECRET=mj-key  \
+-e AUTH_SECRET_KEY=管理员密码数字跟英文 \
+-v ~/mjuser/:/app/data/  ydlhero/chatui:mjuser
+```
 ![cover](./docs/mj2a1.jpg)
 ## 支持功能
 - ✅ 原chatgpt web 所有功能
