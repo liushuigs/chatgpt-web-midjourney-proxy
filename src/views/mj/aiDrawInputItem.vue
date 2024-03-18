@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // boy, Cyberpunk , Top view , Face Shot (VCU) , Warm light  --style raw  --ar 3:4 --q 0.5 --v 5.2
 import { computed, onMounted, ref, watch } from 'vue'
-import { NButton, NInput, NPopover, NSelect, NTag, useMessage } from 'naive-ui'
+import { NButton, NInput, NPopover, NSelect, NTag, useMessage,NInputNumber } from 'naive-ui'
 import config from './draw.json'
 import AiMsg from './aiMsg.vue'
 import { SvgIcon } from '@/components/common'
@@ -24,7 +24,7 @@ const vf = [{ s: 'width: 100%; height: 100%;', label: '1:1' },
   { s: 'width: 50%; height: 100%;', label: '9:16' },
 ]
 
-const f = ref({ bili: -1, quality: '', view: '', light: '', shot: '', style: '', styles: '', version: '--v 6.0' })
+const f = ref({ bili: -1, quality: '', view: '', light: '', shot: '', style: '', styles: '', version: '--v 6.0',cw:'',sref:'',cref:"" })
 const st = ref({
   text: '',
   isDisabled: false,
@@ -109,21 +109,7 @@ function createPrompt(rz: string) {
     return ''
   }
 
-  // for(let v of farr){
-  //     if( ! f.value[v.k] || f.value[v.k]==null || f.value[v.k]=='' ) continue;
-  //      mlog('k ', rz,  f.value  );
-  //     if(v.k=='quality') rz +=`  --q ${f.value.quality}`;
-  //     else if(v.k=='styles') { if( f.value.styles ) rz +=` ${f.value.styles}`;}
-  //     else if(v.k=='version') {
-  //         st.value.bot= '';
-  //        if(['MID_JOURNEY','NIJI_JOURNEY'].indexOf(f.value.version)>-1 ){
-  //              st.value.bot= f.value.version ;
-  //        } else   rz +=` ${f.value.version}`;
-  //     }
-  //     else if( f.value[v.k] ) rz +=` , ${f.value[v.k]}`;
-  // }
-  // mlog('createPrompt ', rz,  f.value  );
-  // if(f.value.bili>-1) rz +=` --ar ${vf[f.value.bili].label}`;
+   
   let rzp = '' // 参数组合字符串
   let rzk = '' // 描述词组合字符串
   for (const v of farr) {
@@ -145,8 +131,10 @@ function createPrompt(rz: string) {
   }
 
   mlog('createPrompt ', rz, f.value)
-  if (f.value.bili > -1)
-    rzp += ` --ar ${vf[f.value.bili].label}`
+  if( f.value.sref.trim() != '' ) rzp += ` --sref ${f.value.sref}`
+  if( f.value.cref.trim() != '' ) rzp += ` --cref ${f.value.cref}`
+  if( f.value.cw!='' ) rzp += ` --cw ${f.value.cw}`
+  if (f.value.bili > -1) rzp += ` --ar ${vf[f.value.bili].label}`
   rz = rzk + rz + rzp
   return rz
 }
@@ -269,6 +257,19 @@ const exportToTxt = async () => {
       <div>{{ v.v }}</div>
       <NSelect v-model:value="f[v.k]" :options="drawlocalized[`${v.k}List`]" size="small" class="!w-[60%]" :clearable="true" />
     </section>
+    <section class="mb-4 flex justify-between items-center"  >
+     <div  >cw(0-100)</div>
+     <NInputNumber :min="0" :max="100" v-model:value="f.cw" class="!w-[60%]" size="small" clearable placeholder="0-100" />
+    </section >
+    <section class="mb-4 flex justify-between items-center"  >
+     <div class="w-[60px]">sref</div>
+     <NInput v-model:value="f.sref" size="small" placeholder="https://" clearable />
+    </section>
+    <section class="mb-4 flex justify-between items-center"  >
+     <div class="w-[60px]">cref</div>
+     <NInput  v-model:value="f.cref" size="small" placeholder="https://" clearable/>
+    </section>
+     
     <!-- <section class="mb-4 flex justify-between items-center"  >
      <div>机器人</div>
     <n-select v-model:value="st.bot" :options="config.botList" size="small"  class="!w-[60%]" :clearable="true" />
