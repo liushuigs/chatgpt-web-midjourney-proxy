@@ -218,6 +218,21 @@ const exportToTxt = async () => {
   ms.success(t('mjchat.exSuccess'))
 }
 // const config=
+const clearAll=()=>{
+  st.value.fileBase64=[];
+  st.value.text='';
+  f.value.bili=-1;
+  f.value.version='';
+  f.value.quality='';
+  f.value.shot='';
+  f.value.light='';
+  f.value.style='';
+  f.value.styles='';
+  f.value.view='';
+  f.value.cref='';
+  f.value.cw='';
+  f.value.sref='';
+}
 </script>
 
 <template>
