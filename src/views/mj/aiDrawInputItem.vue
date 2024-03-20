@@ -24,7 +24,7 @@ const vf = [{ s: 'width: 100%; height: 100%;', label: '1:1' },
   { s: 'width: 50%; height: 100%;', label: '9:16' },
 ]
 
-const f = ref({ bili: -1, quality: '', view: '', light: '', shot: '', style: '', styles: '', version: '--v 6.0',cw:'',sref:'',cref:"" })
+const f = ref({ bili: -1, quality: '', view: '', light: '', shot: '', style: '', styles: '', version: '--v 6.0',cw:0,sref:'',cref:"" })
 const st = ref({
   text: '',
   isDisabled: false,
@@ -133,7 +133,8 @@ function createPrompt(rz: string) {
   mlog('createPrompt ', rz, f.value)
   if( f.value.sref.trim() != '' ) rzp += ` --sref ${f.value.sref}`
   if( f.value.cref.trim() != '' ) rzp += ` --cref ${f.value.cref}`
-  if( f.value.cw!='' ) rzp += ` --cw ${f.value.cw}`
+  if(  f.value.cw>=0 && f.value.cw<=100  ) rzp += ` --cw ${f.value.cw}`
+  
   if (f.value.bili > -1) rzp += ` --ar ${vf[f.value.bili].label}`
   rz = rzk + rz + rzp
   return rz
@@ -272,6 +273,7 @@ const clearAll=()=>{
       <div>{{ v.v }}</div>
       <NSelect v-model:value="f[v.k]" :options="drawlocalized[`${v.k}List`]" size="small" class="!w-[60%]" :clearable="true" />
     </section>
+
     <section class="mb-4 flex justify-between items-center"  >
      <div  >cw(0-100)</div>
      <NInputNumber :min="0" :max="100" v-model:value="f.cw" class="!w-[60%]" size="small" clearable placeholder="0-100" />
