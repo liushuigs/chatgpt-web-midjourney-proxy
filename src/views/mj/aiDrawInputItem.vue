@@ -133,7 +133,7 @@ function createPrompt(rz: string) {
   mlog('createPrompt ', rz, f.value)
   if( f.value.sref.trim() != '' ) rzp += ` --sref ${f.value.sref}`
   if( f.value.cref.trim() != '' ) rzp += ` --cref ${f.value.cref}`
-  if(  f.value.cw>=0 && f.value.cw<=100  ) rzp += ` --cw ${f.value.cw}`
+  if( f.value.cw!=null && f.value.cw>=0 && f.value.cw<=100  ) rzp += ` --cw ${f.value.cw}`
   
   if (f.value.bili > -1) rzp += ` --ar ${vf[f.value.bili].label}`
   rz = rzk + rz + rzp
@@ -276,15 +276,15 @@ const clearAll=()=>{
 
     <section class="mb-4 flex justify-between items-center"  >
      <div  >cw(0-100)</div>
-     <NInputNumber :min="0" :max="100" v-model:value="f.cw" class="!w-[60%]" size="small" clearable placeholder="0-100" />
+     <NInputNumber :min="0" :max="100" v-model:value="f.cw" class="!w-[60%]" size="small" clearable placeholder="0-100 角色参考程度" />
     </section >
     <section class="mb-4 flex justify-between items-center"  >
      <div class="w-[60px]">sref</div>
-     <NInput v-model:value="f.sref" size="small" placeholder="https://" clearable />
+     <NInput v-model:value="f.sref" size="small" placeholder="图片url 生成风格一致的图像" clearable />
     </section>
     <section class="mb-4 flex justify-between items-center"  >
      <div class="w-[60px]">cref</div>
-     <NInput  v-model:value="f.cref" size="small" placeholder="https://" clearable/>
+     <NInput  v-model:value="f.cref" size="small" placeholder="图片url 生成角色一致的图像" clearable/>
     </section>
      
     <!-- <section class="mb-4 flex justify-between items-center"  >
