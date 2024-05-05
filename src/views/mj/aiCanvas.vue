@@ -42,5 +42,6 @@ const loadOk = (e: Event) => {
 </script>
 
 <template>
-  <iframe v-if="st.q" ref="ifdiv" :src="`https://mj.aibear.com.cn/draw/mitf/index.html?${st.q}`" class=" h-[80vh] w-full" style="border-width: 0px; border-style: none; overflow: hidden;" @load="loadOk" />
+  <!-- <iframe v-if="st.q" ref="ifdiv" :src="`https://mj.aibear.com.cn/draw/mitf/index.html?${st.q}`" class=" h-[80vh] w-full" style="border-width: 0px; border-style: none; overflow: hidden;" @load="loadOk" /> -->
+  <iframe v-if="st.q" ref="ifdiv" :src="`https://static.aitutu.cc/res/mitf/index.html?${st.q}`" class=" h-[80vh] w-full" style="border-width: 0px; border-style: none; overflow: hidden;" @load="loadOk" />
 </template>
